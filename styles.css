@@ -93,24 +93,10 @@ body {
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.28));
 }
 
-.kicker {
-  color: #ffe08a;
-  font-size: 13px;
-  font-weight: 800;
-}
-
 h1 {
   font-size: clamp(30px, 5vw, 44px);
   font-weight: 800;
   line-height: 1.1;
-}
-
-.hero-copy {
-  margin-top: 6px;
-  max-width: 420px;
-  color: rgba(255, 248, 232, 0.82);
-  font-size: 15px;
-  line-height: 1.9;
 }
 
 .hero-medals {
@@ -242,38 +228,9 @@ input {
   height: 28px;
 }
 
-.title-wrap { min-width: 0; }
-
-.title-wrap h2 {
+.event-name h2 {
   font-size: 22px;
   font-weight: 800;
-}
-
-.meta {
-  margin-top: 3px;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.badge {
-  font-size: 12px;
-  font-weight: 800;
-  color: #fff;
-  background: var(--accent);
-  border-radius: 999px;
-  padding: 7px 11px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.rule {
-  font-size: 14px;
-  line-height: 1.9;
-  color: var(--muted);
-  background: color-mix(in srgb, var(--accent) 7%, #fffaf2);
-  border-radius: 14px;
-  padding: 10px 12px;
 }
 
 .fields {
@@ -337,43 +294,6 @@ input {
   font-variant-numeric: tabular-nums;
 }
 
-.delta {
-  margin-top: 4px;
-  font-size: 13px;
-  font-weight: 700;
-  font-style: normal;
-  color: #9ad7b8;
-  line-height: 1.6;
-}
-
-.delta.is-down { color: #ffb4bc; }
-.delta.is-even { color: #f5d76e; }
-
-.examples {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chip {
-  font-family: inherit;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 7px 11px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.chip:hover,
-.chip.is-active {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, white);
-}
-
 .dock {
   position: fixed;
   left: 50%;
@@ -407,13 +327,6 @@ input {
   line-height: 1.1;
   color: #ffe08a;
   font-variant-numeric: tabular-nums;
-}
-
-.dock-score small {
-  display: block;
-  color: #9cb0c8;
-  font-size: 13px;
-  margin-top: 2px;
 }
 
 #resetBtn {

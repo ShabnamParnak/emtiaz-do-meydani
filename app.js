@@ -9,68 +9,39 @@ const EVENTS = [
   {
     id: "hurdles",
     title: "موانع",
-    meta: "هر ۱ واحد ۷ امتیاز · کمتر بهتر است",
-    rule: "حد نصاب ۲۴۰ برابر ۱۰۰۰ امتیاز است. هر ۱ واحد کمتر، ۷ امتیاز زیاد و هر ۱ واحد بیشتر، ۷ امتیاز کم می‌شود.",
     kind: "lower",
     unit: "رکورد",
-    badge: "حد نصاب ۲۴۰",
     icon: "hurdles",
     reference: 240,
-    pointsPerUnit: 7,
-    examples: [
-      { label: "۲۴۰ → ۱۰۰۰", value: 240 },
-      { label: "۲۵۰ → ۹۳۰", value: 250 },
-      { label: "۲۳۹ → ۱۰۰۷", value: 239 }
-    ]
+    pointsPerUnit: 7
   },
   {
     id: "shooting",
     title: "تیراندازی",
-    meta: "نمره · هر ۱ نمره ۷ امتیاز",
-    rule: "حد نصاب ۱۸۰ نمره برابر ۱۰۰۰ امتیاز است. هر ۱ نمره کمتر یا بیشتر، ۷ امتیاز کم یا زیاد می‌شود.",
     kind: "higher",
     unit: "نمره",
-    badge: "حد نصاب ۱۸۰",
     icon: "shooting",
     reference: 180,
-    pointsPerUnit: 7,
-    examples: [
-      { label: "۱۸۰ → ۱۰۰۰", value: 180 },
-      { label: "۱۷۰ → ۹۳۰", value: 170 }
-    ]
+    pointsPerUnit: 7
   },
   {
     id: "sprint",
     title: "دو سرعت",
-    meta: "ثانیه · هر ثانیه ۲۳ امتیاز",
-    rule: "حد نصاب ۳۱٫۵۰ ثانیه برابر ۱۰۰۰ امتیاز است. هر ۱ ثانیه کمتر یا بیشتر، ۲۳ امتیاز زیاد یا کم می‌شود.",
     kind: "lower",
     unit: "ثانیه",
-    badge: "حد نصاب ۳۱٫۵۰",
     icon: "sprint",
     reference: 31.5,
     pointsPerUnit: 23,
-    step: "0.01",
-    examples: [
-      { label: "۳۱٫۵۰ → ۱۰۰۰", value: 31.5 },
-      { label: "۳۲٫۵۰ → ۹۷۷", value: 32.5 }
-    ]
+    step: "0.01"
   },
   {
     id: "endurance",
     title: "دو استقامت",
-    meta: "دقیقه و ثانیه · هر ثانیه ۱ امتیاز",
-    rule: "حد نصاب ۲۸ دقیقه برابر ۱۰۰۰ امتیاز است. هر ۱ ثانیه کمتر یا بیشتر، ۱ امتیاز زیاد یا کم می‌شود.",
     kind: "time",
     unit: "دقیقه و ثانیه",
-    badge: "حد نصاب ۲۸:۰۰",
     icon: "endurance",
     referenceSeconds: 28 * 60,
-    pointsPerSecond: 1,
-    examples: [
-      { label: "۲۸:۰۰ → ۱۰۰۰", minutes: 28, seconds: 0 },
-      { label: "۲۸:۳۰ → ۹۷۰", minutes: 28, seconds: 30 }
-    ]
+    pointsPerSecond: 1
   }
 ];
 
@@ -122,31 +93,20 @@ function render() {
            <input class="num" data-id="${event.id}" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.reference}" />
          </div>`;
 
-    const chips = event.examples.map((ex, index) =>
-      `<button class="chip" type="button" data-example="${event.id}" data-index="${index}" data-value='${JSON.stringify(ex)}'>${ex.label}</button>`
-    ).join("");
-
     return `<article class="event-card tone-${event.icon}" id="card-${event.id}">
       <div class="event-head">
         <div class="event-name">
           <span class="icon">${ICONS[event.icon]}</span>
-          <div class="title-wrap">
-            <h2>${event.title}</h2>
-            <p class="meta">${event.meta}</p>
-          </div>
+          <h2>${event.title}</h2>
         </div>
-        <span class="badge">${event.badge}</span>
       </div>
-      <p class="rule">${event.rule}</p>
       <div class="fields">
         ${input}
         <div class="score-box">
           <span>امتیاز</span>
           <strong data-score="${event.id}">—</strong>
-          <em class="delta" data-delta="${event.id}"></em>
         </div>
       </div>
-      <div class="examples">${chips}</div>
     </article>`;
   }).join("");
 }
@@ -162,81 +122,26 @@ function readValue(event) {
   return parseLocaleNumber(document.querySelector(`[data-id="${event.id}"]`).value);
 }
 
-function setDelta(eventId, score) {
-  const el = document.querySelector(`[data-delta="${eventId}"]`);
-  el.classList.remove("is-down", "is-even");
-  if (score === null) {
-    el.textContent = "در انتظار ورودی";
-    return;
-  }
-  const diff = score - 1000;
-  if (diff === 0) {
-    el.textContent = "دقیقاً حد نصاب";
-    el.classList.add("is-even");
-  } else if (diff > 0) {
-    el.textContent = `${fa(diff)} بالاتر از حد نصاب`;
-  } else {
-    el.textContent = `${fa(Math.abs(diff))} پایین‌تر از حد نصاب`;
-    el.classList.add("is-down");
-  }
-}
-
 function updateScores() {
   const scores = EVENTS.map((event) => {
     const score = calcScore(event, readValue(event));
     const card = document.getElementById(`card-${event.id}`);
     card.classList.toggle("is-filled", score !== null);
     document.querySelector(`[data-score="${event.id}"]`).textContent = score === null ? "—" : fa(score);
-    setDelta(event.id, score);
     return score;
   });
 
   const filled = scores.filter((s) => s !== null);
   document.getElementById("totalScore").textContent = filled.length ? fa(filled.reduce((a, b) => a + b, 0)) : "—";
-  document.getElementById("filledCount").textContent = filled.length
-    ? `${filled.length.toLocaleString("fa-IR")} ماده از ۴ ماده`
-    : "هنوز ماده‌ای وارد نشده";
-}
-
-function fillExample(event, example, index) {
-  document.querySelectorAll(`[data-example="${event.id}"]`).forEach((chip, chipIndex) => {
-    chip.classList.toggle("is-active", chipIndex === index);
-  });
-  if (event.kind === "time") {
-    document.querySelector(`[data-id="${event.id}"][data-part="minutes"]`).value = example.minutes;
-    document.querySelector(`[data-id="${event.id}"][data-part="seconds"]`).value = example.seconds;
-  } else {
-    document.querySelector(`[data-id="${event.id}"]`).value = example.value;
-  }
-  updateScores();
 }
 
 render();
 updateScores();
 
-document.getElementById("events").addEventListener("input", (e) => {
-  const id = e.target.dataset.id;
-  if (id) {
-    document.querySelectorAll(`[data-example="${id}"]`).forEach((chip) => chip.classList.remove("is-active"));
-  }
-  updateScores();
-});
-
-document.getElementById("events").addEventListener("click", (e) => {
-  const chip = e.target.closest("[data-example]");
-  if (!chip) return;
-  const event = EVENTS.find((item) => item.id === chip.dataset.example);
-  fillExample(event, JSON.parse(chip.dataset.value), Number(chip.dataset.index));
-});
+document.getElementById("events").addEventListener("input", updateScores);
 
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("athlete").value = "";
   document.querySelectorAll("#events input").forEach((input) => { input.value = ""; });
-  document.querySelectorAll(".chip").forEach((chip) => chip.classList.remove("is-active"));
   updateScores();
 });
-
-if (new URLSearchParams(location.search).has("demo")) {
-  document.getElementById("athlete").value = "نمونه ارزیابی";
-  EVENTS.forEach((event) => fillExample(event, event.examples[1], 1));
-}

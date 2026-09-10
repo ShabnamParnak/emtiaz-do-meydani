@@ -133,8 +133,8 @@ h1 {
 }
 
 .date-field {
-  width: 150px;
-  flex-shrink: 0;
+  width: 160px;
+  flex: 0 0 160px;
 }
 
 #recordDate {
@@ -157,7 +157,7 @@ h1 {
 
 .athlete-icon svg { width: 24px; height: 24px; }
 
-.athlete div { flex: 1; min-width: 0; }
+.athlete-name { flex: 1; min-width: 0; }
 
 label {
   display: block;

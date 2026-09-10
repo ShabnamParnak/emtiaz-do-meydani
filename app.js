@@ -1,42 +1,42 @@
 const ICONS = {
-  jump: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 20c2-5 4-8 9-12"/><circle cx="17" cy="6" r="2.1"/></svg>',
-  high: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 19V7"/><path d="M5 10h14"/><path d="M19 19V7"/></svg>',
+  hurdles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V8"/><path d="M4 12h7"/><path d="M11 19V8"/><path d="M13 19V11"/><path d="M13 14h7"/><path d="M20 19V11"/></svg>',
+  shooting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
   sprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h16M4 12h16M4 16h16"/></svg>',
   endurance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>'
 };
 
 const EVENTS = [
   {
-    id: "longJump",
-    title: "پرش",
-    meta: "سانتی‌متر · هر ۱۰ سانتی‌متر ۳۲ امتیاز",
-    rule: "حد نصاب ۲۴۰ سانتی‌متر برابر ۱۰۰۰ امتیاز است. هر ۱۰ سانتی‌متر کمتر یا بیشتر، ۳۲ امتیاز کم یا زیاد می‌شود.",
-    kind: "higher",
-    unit: "سانتی‌متر",
+    id: "hurdles",
+    title: "موانع",
+    meta: "هر ۱ واحد ۷ امتیاز · کمتر بهتر است",
+    rule: "حد نصاب ۲۴۰ برابر ۱۰۰۰ امتیاز است. هر ۱ واحد کمتر، ۷ امتیاز زیاد و هر ۱ واحد بیشتر، ۷ امتیاز کم می‌شود.",
+    kind: "lower",
+    unit: "رکورد",
     badge: "حد نصاب ۲۴۰",
-    icon: "jump",
+    icon: "hurdles",
     reference: 240,
-    pointsPerUnit: 3.2,
+    pointsPerUnit: 7,
     examples: [
       { label: "۲۴۰ → ۱۰۰۰", value: 240 },
-      { label: "۲۱۵ → ۹۲۰", value: 215 },
-      { label: "۲۳۹ → ۹۹۷", value: 239 }
+      { label: "۲۵۰ → ۹۳۰", value: 250 },
+      { label: "۲۳۹ → ۱۰۰۷", value: 239 }
     ]
   },
   {
-    id: "highJump",
-    title: "پرش ارتفاع",
-    meta: "سانتی‌متر · هر سانتی‌متر ۸ امتیاز",
-    rule: "حد نصاب ۱۸۰ سانتی‌متر برابر ۱۰۰۰ امتیاز است. هر ۱ سانتی‌متر کمتر یا بیشتر، ۸ امتیاز کم یا زیاد می‌شود.",
+    id: "shooting",
+    title: "تیراندازی",
+    meta: "نمره · هر ۱ نمره ۷ امتیاز",
+    rule: "حد نصاب ۱۸۰ نمره برابر ۱۰۰۰ امتیاز است. هر ۱ نمره کمتر یا بیشتر، ۷ امتیاز کم یا زیاد می‌شود.",
     kind: "higher",
-    unit: "سانتی‌متر",
+    unit: "نمره",
     badge: "حد نصاب ۱۸۰",
-    icon: "high",
+    icon: "shooting",
     reference: 180,
-    pointsPerUnit: 8,
+    pointsPerUnit: 7,
     examples: [
       { label: "۱۸۰ → ۱۰۰۰", value: 180 },
-      { label: "۱۷۰ → ۹۲۰", value: 170 }
+      { label: "۱۷۰ → ۹۳۰", value: 170 }
     ]
   },
   {

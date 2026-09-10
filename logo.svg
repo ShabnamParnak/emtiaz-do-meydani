@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="logoGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#d4a017"/>
+    </linearGradient>
+    <linearGradient id="logoTrack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff4d5a"/>
+      <stop offset="1" stop-color="#b50e2a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="62" fill="#08192f"/>
+  <circle cx="64" cy="64" r="56" fill="url(#logoGold)"/>
+  <circle cx="64" cy="64" r="50" fill="#08192f"/>
+  <ellipse cx="64" cy="68" rx="34" ry="18" fill="none" stroke="url(#logoTrack)" stroke-width="10"/>
+  <ellipse cx="64" cy="68" rx="34" ry="18" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="6 7" opacity=".9"/>
+  <path d="M46 86c8-16 14-28 32-42" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="80" cy="42" r="6" fill="#ffe08a"/>
+  <path d="M38 96h52" stroke="#ffe08a" stroke-width="3" stroke-linecap="round"/>
+</svg>

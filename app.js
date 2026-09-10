@@ -1,8 +1,8 @@
 const ICONS = {
-  hurdles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V8"/><path d="M4 12h7"/><path d="M11 19V8"/><path d="M13 19V11"/><path d="M13 14h7"/><path d="M20 19V11"/></svg>',
-  shooting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
-  sprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h16M4 12h16M4 16h16"/></svg>',
-  endurance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>'
+  hurdles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V9"/><path d="M3 12h8"/><path d="M11 20V9"/><path d="M13 20v-8"/><path d="M13 14h8"/><path d="M21 20v-8"/><circle cx="8" cy="5.5" r="1.6" fill="currentColor"/><path d="M7 8.2c2.2-1 4.4.4 6.2-1.4"/></svg>',
+  shooting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
+  sprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="15.5" cy="5" r="1.7" fill="currentColor"/><path d="M4 20l4.2-6.4 3.3 2.2L16 9"/><path d="M10 11.4 8 8.2"/><path d="M14.8 9.2 18 7.8"/></svg>',
+  endurance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V8.5"/><path d="M12 13l3.4 2"/><path d="M9 3h6"/></svg>'
 };
 
 const EVENTS = [
@@ -126,7 +126,7 @@ function render() {
       `<button class="chip" type="button" data-example="${event.id}" data-index="${index}" data-value='${JSON.stringify(ex)}'>${ex.label}</button>`
     ).join("");
 
-    return `<article class="event-card" id="card-${event.id}">
+    return `<article class="event-card tone-${event.icon}" id="card-${event.id}">
       <div class="event-head">
         <div class="event-name">
           <span class="icon">${ICONS[event.icon]}</span>

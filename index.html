@@ -52,13 +52,20 @@
       <span class="athlete-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.4-4 4-6 7-6s5.6 2 7 6"/></svg>
       </span>
-      <div>
+      <div class="athlete-name">
         <label for="athlete">ورزشکار</label>
-        <input id="athlete" type="text" placeholder="نام و نام خانوادگی" autocomplete="name" />
+        <input id="athlete" type="text" list="athleteList" placeholder="نام و نام خانوادگی" autocomplete="name" />
+        <datalist id="athleteList"></datalist>
+      </div>
+      <div class="date-field">
+        <label for="recordDate">تاریخ</label>
+        <input id="recordDate" type="date" />
       </div>
     </section>
 
     <section class="grid" id="events"></section>
+
+    <section class="history" id="history"></section>
   </div>
 
   <footer class="dock">
@@ -69,7 +76,10 @@
       </span>
       <strong id="totalScore">—</strong>
     </div>
-    <button type="button" id="resetBtn">شروع دوباره</button>
+    <div class="dock-actions">
+      <button type="button" id="saveBtn">ثبت</button>
+      <button type="button" id="resetBtn">شروع دوباره</button>
+    </div>
   </footer>
 
   <script src="app.js"></script>

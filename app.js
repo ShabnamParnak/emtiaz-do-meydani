@@ -122,6 +122,79 @@ function readValue(event) {
   return parseLocaleNumber(document.querySelector(`[data-id="${event.id}"]`).value);
 }
 
+const STORAGE_KEY = "athletics-history";
+
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function todayInputValue() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+function formatFaDate(isoDate) {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  return date.toLocaleDateString("fa-IR-u-ca-persian", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function formatEventValue(event, value) {
+  if (value == null) return "—";
+  if (event.kind === "time") {
+    const minutes = Math.floor(value / 60);
+    const seconds = Math.round(value % 60);
+    return `${fa(minutes)}:${fa(seconds).padStart(2, "۰")}`;
+  }
+  return fa(value);
+}
+
+function collectRecord() {
+  const athlete = document.getElementById("athlete").value.trim();
+  const date = document.getElementById("recordDate").value || todayInputValue();
+  const events = {};
+  let total = 0;
+  let filled = 0;
+
+  EVENTS.forEach((event) => {
+    const value = readValue(event);
+    const score = calcScore(event, value);
+    events[event.id] = {
+      value,
+      display: formatEventValue(event, value),
+      score
+    };
+    if (score !== null) {
+      total += score;
+      filled += 1;
+    }
+  });
+
+  return { athlete, date, events, total, filled };
+}
+
 function updateScores() {
   const scores = EVENTS.map((event) => {
     const score = calcScore(event, readValue(event));
@@ -133,15 +206,100 @@ function updateScores() {
 
   const filled = scores.filter((s) => s !== null);
   document.getElementById("totalScore").textContent = filled.length ? fa(filled.reduce((a, b) => a + b, 0)) : "—";
+  renderHistory();
+}
+
+function updateAthleteList() {
+  const names = [...new Set(loadHistory().map((item) => item.athlete))].sort((a, b) => a.localeCompare(b, "fa"));
+  document.getElementById("athleteList").innerHTML = names
+    .map((name) => `<option value="${name.replace(/"/g, "&quot;")}"></option>`)
+    .join("");
+}
+
+function renderHistory() {
+  const root = document.getElementById("history");
+  const currentName = document.getElementById("athlete").value.trim();
+  const items = loadHistory()
+    .filter((item) => !currentName || item.athlete === currentName)
+    .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+
+  if (!items.length) {
+    root.innerHTML = "";
+    return;
+  }
+
+  const grouped = new Map();
+  items.forEach((item) => {
+    if (!grouped.has(item.athlete)) grouped.set(item.athlete, []);
+    grouped.get(item.athlete).push(item);
+  });
+
+  root.innerHTML = [...grouped.entries()].map(([name, records]) => {
+    const rows = records.map((item) => {
+      const details = EVENTS.map((event) => {
+        const entry = item.events[event.id];
+        if (!entry || entry.score == null) return "";
+        return `<span>${event.title}: ${entry.display} (${fa(entry.score)})</span>`;
+      }).filter(Boolean).join("");
+
+      return `<article class="history-row">
+        <div>
+          <strong>${formatFaDate(item.date)}</strong>
+          <div class="history-details">${details}</div>
+        </div>
+        <div class="history-side">
+          <b>${fa(item.total)}</b>
+          <button type="button" class="ghost" data-delete="${item.id}">حذف</button>
+        </div>
+      </article>`;
+    }).join("");
+
+    return `<section class="history-group">
+      <h3>${escapeHtml(name)}</h3>
+      ${rows}
+    </section>`;
+  }).join("");
+}
+
+function saveRecord() {
+  const record = collectRecord();
+  if (!record.athlete) {
+    document.getElementById("athlete").focus();
+    return;
+  }
+  if (!record.filled) return;
+
+  const items = loadHistory();
+  items.push({
+    id: String(Date.now()),
+    athlete: record.athlete,
+    date: record.date,
+    events: record.events,
+    total: record.total
+  });
+  saveHistory(items);
+  updateAthleteList();
+  renderHistory();
 }
 
 render();
+document.getElementById("recordDate").value = todayInputValue();
+updateAthleteList();
 updateScores();
 
 document.getElementById("events").addEventListener("input", updateScores);
-
+document.getElementById("athlete").addEventListener("input", renderHistory);
+document.getElementById("saveBtn").addEventListener("click", saveRecord);
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("athlete").value = "";
+  document.getElementById("recordDate").value = todayInputValue();
   document.querySelectorAll("#events input").forEach((input) => { input.value = ""; });
   updateScores();
+});
+document.getElementById("history").addEventListener("click", (e) => {
+  const button = e.target.closest("[data-delete]");
+  if (!button) return;
+  saveHistory(loadHistory().filter((item) => item.id !== button.dataset.delete));
+  updateAthleteList();
+  renderHistory();
 });

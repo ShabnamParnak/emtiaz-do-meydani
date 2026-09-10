@@ -1,0 +1,380 @@
+:root {
+  --navy: #0b1f3a;
+  --red: #c8102e;
+  --bg: #eef2f6;
+  --card: #ffffff;
+  --line: #d9e1ea;
+  --muted: #5b6b7c;
+  --ink: #122033;
+  --shadow: 0 18px 40px rgba(11, 31, 58, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Vazirmatn, Tahoma, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 420px at 100% -10%, rgba(200, 16, 46, 0.16), transparent 50%),
+    linear-gradient(180deg, #f7f9fc 0%, var(--bg) 100%);
+  padding: 28px 16px 140px;
+}
+
+.app {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.logo,
+.event-name {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--navy);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  padding: 10px 9px;
+  flex-shrink: 0;
+}
+
+.mark i {
+  display: block;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.mark i:nth-child(1) { transform: translateY(8px); }
+.mark i:nth-child(2) { transform: translateY(4px); }
+.mark i:nth-child(4) { transform: translateY(10px); }
+
+.kicker {
+  color: var(--red);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+h1 {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+
+.hero-copy {
+  max-width: 340px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.athlete,
+.event-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.athlete {
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+input {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+}
+
+#athlete {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.event-card {
+  border-radius: 22px;
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.event-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #f3f6fa;
+  color: var(--navy);
+  flex-shrink: 0;
+}
+
+.icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.title-wrap {
+  min-width: 0;
+}
+
+.title-wrap h2 {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.meta {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--navy);
+  background: #eef3f8;
+  border-radius: 999px;
+  padding: 6px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.rule {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+  background: #f7f9fc;
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.field {
+  background: #f7f9fc;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 12px 14px;
+  min-width: 0;
+}
+
+.field:focus-within {
+  border-color: var(--navy);
+  background: #fff;
+}
+
+.num {
+  direction: ltr;
+  text-align: right;
+  font-size: 28px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.time-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.score-box {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  text-align: right;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.score-box span {
+  font-size: 11px;
+  opacity: 0.7;
+  font-weight: 700;
+}
+
+.score-box strong {
+  font-size: 32px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.delta {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: normal;
+  color: #9ad7b8;
+  line-height: 1.6;
+}
+
+.delta.is-down { color: #ffb4bc; }
+.delta.is-even { color: #f5d76e; }
+
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  font-family: inherit;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip:hover,
+.chip.is-active {
+  border-color: var(--navy);
+  color: var(--navy);
+  background: #eef3f8;
+}
+
+.dock {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: min(1080px, calc(100% - 24px));
+  max-width: none;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 20px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 18px 40px rgba(11, 31, 58, 0.28);
+  z-index: 20;
+}
+
+.dock-score span,
+.dock-score small {
+  display: block;
+}
+
+.dock-score span {
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 700;
+}
+
+.dock-score strong {
+  font-size: 30px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dock-score small {
+  color: #9cb0c8;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+#resetBtn {
+  font-family: inherit;
+  border: 0;
+  background: var(--red);
+  color: #fff;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .hero,
+  .event-head {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .hero-copy {
+    max-width: none;
+  }
+
+  .fields,
+  .time-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .num {
+    font-size: 24px;
+  }
+
+  .score-box strong {
+    font-size: 28px;
+  }
+}
+
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1f3a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="امتیاز دوومیدانی" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="logo">
+        <span class="mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <div>
+          <p class="kicker">پنل مربی</p>
+          <h1>محاسبه امتیاز</h1>
+        </div>
+      </div>
+      <p class="hero-copy">عملکرد را وارد کنید. امتیاز نسبت به حد نصاب ۱۰۰۰ همان لحظه مشخص می‌شود.</p>
+    </header>
+
+    <section class="athlete">
+      <label for="athlete">ورزشکار</label>
+      <input id="athlete" type="text" placeholder="نام و نام خانوادگی" autocomplete="name" />
+    </section>
+
+    <section class="grid" id="events"></section>
+  </div>
+
+  <footer class="dock">
+    <div class="dock-score">
+      <span>جمع امتیاز</span>
+      <strong id="totalScore">—</strong>
+      <small id="filledCount">هنوز ماده‌ای وارد نشده</small>
+    </div>
+    <button type="button" id="resetBtn">شروع دوباره</button>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 const ICONS = {
   hurdles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V9"/><path d="M3 12h8"/><path d="M11 20V9"/><path d="M13 20v-8"/><path d="M13 14h8"/><path d="M21 20v-8"/><circle cx="8" cy="5.5" r="1.6" fill="currentColor"/><path d="M7 8.2c2.2-1 4.4.4 6.2-1.4"/></svg>',
   shooting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
-  sprint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="15.5" cy="5" r="1.7" fill="currentColor"/><path d="M4 20l4.2-6.4 3.3 2.2L16 9"/><path d="M10 11.4 8 8.2"/><path d="M14.8 9.2 18 7.8"/></svg>',
+  swim: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 11c1.6-2 3.2-2 4.8 0s3.2 2 4.8 0 3.2-2 4.8 0 3.2 2 4.8 0"/><path d="M3 16c1.6-2 3.2-2 4.8 0s3.2 2 4.8 0 3.2-2 4.8 0 3.2 2 4.8 0"/><circle cx="8" cy="6" r="1.6" fill="currentColor"/></svg>',
   endurance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V8.5"/><path d="M12 13l3.4 2"/><path d="M9 3h6"/></svg>'
 };
 
@@ -10,7 +10,7 @@ const EVENTS = [
     id: "hurdles",
     title: "موانع",
     kind: "lower",
-    unit: "رکورد",
+    unit: "سانتی‌متر",
     icon: "hurdles",
     reference: 240,
     pointsPerUnit: 7
@@ -25,11 +25,11 @@ const EVENTS = [
     pointsPerUnit: 7
   },
   {
-    id: "sprint",
-    title: "دو سرعت",
+    id: "swim",
+    title: "شنا",
     kind: "lower",
     unit: "ثانیه",
-    icon: "sprint",
+    icon: "swim",
     reference: 31.5,
     pointsPerUnit: 23,
     step: "0.01"
@@ -126,7 +126,13 @@ const STORAGE_KEY = "athletics-history";
 
 function loadHistory() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const items = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return items.map((item) => {
+      if (item.events?.sprint && !item.events.swim) {
+        item.events.swim = item.events.sprint;
+      }
+      return item;
+    });
   } catch {
     return [];
   }
@@ -206,7 +212,7 @@ function updateScores() {
 
   const filled = scores.filter((s) => s !== null);
   document.getElementById("totalScore").textContent = filled.length ? fa(filled.reduce((a, b) => a + b, 0)) : "—";
-  renderHistory();
+  renderTable();
 }
 
 function updateAthleteList() {
@@ -216,49 +222,60 @@ function updateAthleteList() {
     .join("");
 }
 
-function renderHistory() {
-  const root = document.getElementById("history");
-  const currentName = document.getElementById("athlete").value.trim();
-  const items = loadHistory()
-    .filter((item) => !currentName || item.athlete === currentName)
-    .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+function eventEntry(item, eventId) {
+  if (item.events?.[eventId]) return item.events[eventId];
+  if (eventId === "swim") return item.events?.sprint || null;
+  return null;
+}
+
+function renderTable() {
+  const root = document.getElementById("historyTable");
+  const items = loadHistory().sort((a, b) => b.date.localeCompare(a.date) || a.athlete.localeCompare(b.athlete, "fa"));
 
   if (!items.length) {
-    root.innerHTML = "";
+    root.innerHTML = `<p class="table-empty">هنوز رکوردی ثبت نشده</p>`;
     return;
   }
 
-  const grouped = new Map();
-  items.forEach((item) => {
-    if (!grouped.has(item.athlete)) grouped.set(item.athlete, []);
-    grouped.get(item.athlete).push(item);
-  });
-
-  root.innerHTML = [...grouped.entries()].map(([name, records]) => {
-    const rows = records.map((item) => {
-      const details = EVENTS.map((event) => {
-        const entry = item.events[event.id];
-        if (!entry || entry.score == null) return "";
-        return `<span>${event.title}: ${entry.display} (${fa(entry.score)})</span>`;
-      }).filter(Boolean).join("");
-
-      return `<article class="history-row">
-        <div>
-          <strong>${formatFaDate(item.date)}</strong>
-          <div class="history-details">${details}</div>
-        </div>
-        <div class="history-side">
-          <b>${fa(item.total)}</b>
-          <button type="button" class="ghost" data-delete="${item.id}">حذف</button>
-        </div>
-      </article>`;
+  const head = EVENTS.map((event) => `<th>${event.title}</th>`).join("");
+  const rows = items.map((item) => {
+    const cells = EVENTS.map((event) => {
+      const entry = eventEntry(item, event.id);
+      if (!entry || entry.score == null) return `<td>—</td>`;
+      return `<td><b>${fa(entry.score)}</b><small>${entry.display}</small></td>`;
     }).join("");
 
-    return `<section class="history-group">
-      <h3>${escapeHtml(name)}</h3>
-      ${rows}
-    </section>`;
+    return `<tr>
+      <th>${escapeHtml(item.athlete)}</th>
+      <td>${formatFaDate(item.date)}</td>
+      ${cells}
+      <td><b>${fa(item.total)}</b></td>
+      <td><button type="button" class="ghost" data-delete="${item.id}">حذف</button></td>
+    </tr>`;
   }).join("");
+
+  root.innerHTML = `<table>
+    <thead>
+      <tr>
+        <th>ورزشکار</th>
+        <th>تاریخ</th>
+        ${head}
+        <th>جمع</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function setTab(tab) {
+  document.querySelectorAll(".tab").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.tab === tab);
+  });
+  document.getElementById("entryPanel").hidden = tab !== "entry";
+  document.getElementById("tablePanel").hidden = tab !== "table";
+  document.body.classList.toggle("tab-table", tab === "table");
+  if (tab === "table") renderTable();
 }
 
 function saveRecord() {
@@ -279,7 +296,7 @@ function saveRecord() {
   });
   saveHistory(items);
   updateAthleteList();
-  renderHistory();
+  setTab("table");
 }
 
 render();
@@ -288,7 +305,6 @@ updateAthleteList();
 updateScores();
 
 document.getElementById("events").addEventListener("input", updateScores);
-document.getElementById("athlete").addEventListener("input", renderHistory);
 document.getElementById("saveBtn").addEventListener("click", saveRecord);
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("athlete").value = "";
@@ -296,10 +312,14 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   document.querySelectorAll("#events input").forEach((input) => { input.value = ""; });
   updateScores();
 });
-document.getElementById("history").addEventListener("click", (e) => {
+document.getElementById("tabs").addEventListener("click", (e) => {
+  const button = e.target.closest("[data-tab]");
+  if (button) setTab(button.dataset.tab);
+});
+document.getElementById("historyTable").addEventListener("click", (e) => {
   const button = e.target.closest("[data-delete]");
   if (!button) return;
   saveHistory(loadHistory().filter((item) => item.id !== button.dataset.delete));
   updateAthleteList();
-  renderHistory();
+  renderTable();
 });

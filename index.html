@@ -48,24 +48,35 @@
       </div>
     </header>
 
-    <section class="athlete">
-      <span class="athlete-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.4-4 4-6 7-6s5.6 2 7 6"/></svg>
-      </span>
-      <div class="athlete-name">
-        <label for="athlete">ورزشکار</label>
-        <input id="athlete" type="text" list="athleteList" placeholder="نام و نام خانوادگی" autocomplete="name" />
-        <datalist id="athleteList"></datalist>
-      </div>
-      <div class="date-field">
-        <label for="recordDate">تاریخ</label>
-        <input id="recordDate" type="date" />
-      </div>
-    </section>
+    <nav class="tabs" id="tabs">
+      <button type="button" class="tab is-active" data-tab="entry">ثبت</button>
+      <button type="button" class="tab" data-tab="table">جدول</button>
+    </nav>
 
-    <section class="grid" id="events"></section>
+    <div id="entryPanel">
+      <section class="athlete">
+        <span class="athlete-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.4-4 4-6 7-6s5.6 2 7 6"/></svg>
+        </span>
+        <div class="athlete-name">
+          <label for="athlete">ورزشکار</label>
+          <input id="athlete" type="text" list="athleteList" placeholder="نام و نام خانوادگی" autocomplete="name" />
+          <datalist id="athleteList"></datalist>
+        </div>
+        <div class="date-field">
+          <label for="recordDate">تاریخ</label>
+          <input id="recordDate" type="date" />
+        </div>
+      </section>
 
-    <section class="history" id="history"></section>
+      <section class="grid" id="events"></section>
+    </div>
+
+    <div id="tablePanel" hidden>
+      <div class="table-card">
+        <div class="table-wrap" id="historyTable"></div>
+      </div>
+    </div>
   </div>
 
   <footer class="dock">

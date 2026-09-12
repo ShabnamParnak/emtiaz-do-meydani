@@ -207,7 +207,7 @@ input {
 
 .event-card.tone-hurdles { --accent: #f97316; }
 .event-card.tone-shooting { --accent: #0f9d8e; }
-.event-card.tone-sprint { --accent: #e11d48; }
+.event-card.tone-swim { --accent: #0891b2; }
 .event-card.tone-endurance { --accent: #2563eb; }
 
 .event-head {
@@ -367,64 +367,99 @@ input {
   color: #fff;
 }
 
-.history {
-  margin-top: 18px;
-  display: grid;
-  gap: 14px;
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
 }
 
-.history-group {
+.tab {
+  font-family: inherit;
+  border: 0;
+  background: rgba(255, 248, 232, 0.18);
+  color: #fff8e8;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tab.is-active {
+  background: #fff8e8;
+  color: #3b0d16;
+}
+
+.table-card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
   box-shadow: var(--shadow);
-  padding: 16px;
+  overflow: hidden;
 }
 
-.history-group h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
+.table-wrap {
+  overflow-x: auto;
 }
 
-.history-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: start;
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-}
-
-.history-row:first-of-type { border-top: 0; padding-top: 0; }
-
-.history-details {
-  margin-top: 6px;
+.table-empty {
+  padding: 28px 18px;
   color: var(--muted);
-  font-size: 14px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 14px;
+  text-align: center;
 }
 
-.history-side {
-  text-align: left;
-  flex-shrink: 0;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
 }
 
-.history-side b {
+th, td {
+  padding: 12px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+thead th {
+  background: #fff3d6;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+tbody th {
+  text-align: right;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+td small {
   display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+td b {
   color: #9a6b00;
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .ghost {
   font-family: inherit;
-  margin-top: 6px;
   border: 0;
   background: transparent;
   color: var(--red);
   font-weight: 800;
   cursor: pointer;
+}
+
+body.tab-table .dock {
+  display: none;
+}
+
+body.tab-table {
+  padding-bottom: 32px;
 }
 
 @media (max-width: 720px) {

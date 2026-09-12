@@ -9,11 +9,13 @@ const EVENTS = [
   {
     id: "hurdles",
     title: "موانع",
-    kind: "lower",
-    unit: "سانتی‌متر",
+    kind: "time",
+    unit: "دقیقه و ثانیه",
     icon: "hurdles",
-    reference: 240,
-    pointsPerUnit: 7
+    referenceSeconds: 2 * 60 + 40,
+    pointsPerSecond: 7,
+    placeholderMinutes: "2",
+    placeholderSeconds: "40"
   },
   {
     id: "shooting",
@@ -41,7 +43,9 @@ const EVENTS = [
     unit: "دقیقه و ثانیه",
     icon: "endurance",
     referenceSeconds: 28 * 60,
-    pointsPerSecond: 1
+    pointsPerSecond: 1,
+    placeholderMinutes: "28",
+    placeholderSeconds: "00"
   }
 ];
 
@@ -81,11 +85,11 @@ function render() {
       ? `<div class="time-fields">
            <div class="field">
              <label>دقیقه</label>
-             <input class="num" data-id="${event.id}" data-part="minutes" inputmode="numeric" placeholder="28" />
+             <input class="num" data-id="${event.id}" data-part="minutes" inputmode="numeric" placeholder="${event.placeholderMinutes || "0"}" />
            </div>
            <div class="field">
              <label>ثانیه</label>
-             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" placeholder="30" />
+             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" placeholder="${event.placeholderSeconds || "0"}" />
            </div>
          </div>`
       : `<div class="field">
@@ -130,6 +134,21 @@ function loadHistory() {
     return items.map((item) => {
       if (item.events?.sprint && !item.events.swim) {
         item.events.swim = item.events.sprint;
+      }
+      const hurdles = item.events?.hurdles;
+      if (hurdles && hurdles.value != null && !String(hurdles.display || "").includes(":")) {
+        const raw = Number(hurdles.value);
+        const minutes = Math.floor(raw / 100);
+        const seconds = raw % 100;
+        if (raw >= 100 && seconds < 60) {
+          hurdles.value = minutes * 60 + seconds;
+          hurdles.score = Math.round(1000 + 7 * ((2 * 60 + 40) - hurdles.value));
+          hurdles.display = `${fa(minutes)}:${fa(seconds).padStart(2, "۰")}`;
+          item.total = EVENTS.reduce((sum, event) => {
+            const entry = event.id === "hurdles" ? hurdles : item.events?.[event.id];
+            return sum + (entry?.score ?? 0);
+          }, 0);
+        }
       }
       return item;
     });

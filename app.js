@@ -2,7 +2,8 @@ const ICONS = {
   hurdles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V9"/><path d="M3 12h8"/><path d="M11 20V9"/><path d="M13 20v-8"/><path d="M13 14h8"/><path d="M21 20v-8"/><circle cx="8" cy="5.5" r="1.6" fill="currentColor"/><path d="M7 8.2c2.2-1 4.4.4 6.2-1.4"/></svg>',
   shooting: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
   swim: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 11c1.6-2 3.2-2 4.8 0s3.2 2 4.8 0 3.2-2 4.8 0 3.2 2 4.8 0"/><path d="M3 16c1.6-2 3.2-2 4.8 0s3.2 2 4.8 0 3.2-2 4.8 0 3.2 2 4.8 0"/><circle cx="8" cy="6" r="1.6" fill="currentColor"/></svg>',
-  endurance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V8.5"/><path d="M12 13l3.4 2"/><path d="M9 3h6"/></svg>'
+  endurance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V8.5"/><path d="M12 13l3.4 2"/><path d="M9 3h6"/></svg>',
+  grenade: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.2V4a2 2 0 0 1 2-2h.5"/><path d="M10.2 6.2c.6-1 1.6-1.6 2.8-1.6 1.3 0 2.4.7 3 1.8"/><ellipse cx="12.2" cy="14.2" rx="5.4" ry="6.2"/><path d="M8.4 12.2h7.6"/></svg>'
 };
 
 const EVENTS = [
@@ -25,6 +26,15 @@ const EVENTS = [
     icon: "shooting",
     reference: 180,
     pointsPerUnit: 14
+  },
+  {
+    id: "grenade",
+    title: "نارنجک",
+    kind: "higher",
+    unit: "نمره",
+    icon: "grenade",
+    reference: 170,
+    pointsPerUnit: 4
   },
   {
     id: "swim",

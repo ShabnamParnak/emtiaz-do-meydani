@@ -209,6 +209,7 @@ input {
 .event-card.tone-shooting { --accent: #0f9d8e; }
 .event-card.tone-swim { --accent: #0891b2; }
 .event-card.tone-endurance { --accent: #2563eb; }
+.event-card.tone-grenade { --accent: #65a30d; }
 
 .event-head {
   display: flex;
@@ -411,7 +412,7 @@ input {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 880px;
 }
 
 th, td {

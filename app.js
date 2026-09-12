@@ -268,35 +268,43 @@ function renderTable() {
     return;
   }
 
-  const head = EVENTS.map((event) => `<th>${event.title}</th>`).join("");
-  const rows = items.map((item) => {
-    const cells = EVENTS.map((event) => {
+  root.innerHTML = EVENTS.map((event) => {
+    const rows = items.filter((item) => {
       const entry = eventEntry(item, event.id);
-      if (!entry || entry.score == null) return `<td>—</td>`;
-      return `<td><b>${fa(entry.score)}</b><small>${entry.display}</small></td>`;
-    }).join("");
+      return entry && entry.score != null;
+    });
 
-    return `<tr>
-      <th>${escapeHtml(item.athlete)}</th>
-      <td>${formatFaDate(item.date)}</td>
-      ${cells}
-      <td><b>${fa(item.total)}</b></td>
-      <td><button type="button" class="ghost" data-delete="${item.id}">حذف</button></td>
-    </tr>`;
+    const body = rows.length
+      ? rows.map((item) => {
+          const entry = eventEntry(item, event.id);
+          return `<tr>
+            <th>${escapeHtml(item.athlete)}</th>
+            <td>${formatFaDate(item.date)}</td>
+            <td>${entry.display}</td>
+            <td><b>${fa(entry.score)}</b></td>
+            <td><button type="button" class="ghost" data-delete="${item.id}">حذف</button></td>
+          </tr>`;
+        }).join("")
+      : `<tr><td class="table-empty" colspan="5">هنوز رکوردی برای این ماده نیست</td></tr>`;
+
+    return `<section class="table-card event-table tone-${event.icon}">
+      <h2><span class="icon">${ICONS[event.icon]}</span>${event.title}</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ورزشکار</th>
+              <th>تاریخ</th>
+              <th>${event.unit}</th>
+              <th>امتیاز</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${body}</tbody>
+        </table>
+      </div>
+    </section>`;
   }).join("");
-
-  root.innerHTML = `<table>
-    <thead>
-      <tr>
-        <th>ورزشکار</th>
-        <th>تاریخ</th>
-        ${head}
-        <th>جمع</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>${rows}</tbody>
-  </table>`;
 }
 
 function setTab(tab) {

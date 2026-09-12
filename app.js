@@ -33,7 +33,7 @@ const EVENTS = [
     unit: "ثانیه",
     icon: "swim",
     reference: 31.5,
-    pointsPerUnit: 24,
+    pointsPerUnit: 14,
     step: "0.01"
   },
   {
@@ -67,15 +67,17 @@ function parseLocaleNumber(raw) {
 function calcScore(event, rawValue) {
   if (rawValue === null || Number.isNaN(rawValue)) return null;
 
+  let score;
   if (event.kind === "time") {
-    return Math.round(1000 + event.pointsPerSecond * (event.referenceSeconds - rawValue));
+    score = 1000 + event.pointsPerSecond * (event.referenceSeconds - rawValue);
+  } else {
+    const delta = event.kind === "higher"
+      ? rawValue - event.reference
+      : event.reference - rawValue;
+    score = 1000 + delta * event.pointsPerUnit;
   }
 
-  const delta = event.kind === "higher"
-    ? rawValue - event.reference
-    : event.reference - rawValue;
-
-  return Math.round(1000 + delta * event.pointsPerUnit);
+  return Math.max(0, Math.round(score));
 }
 
 function render() {
@@ -142,7 +144,7 @@ function loadHistory() {
         const seconds = raw % 100;
         if (raw >= 100 && seconds < 60) {
           hurdles.value = minutes * 60 + seconds;
-          hurdles.score = Math.round(1000 + 7 * ((2 * 60 + 40) - hurdles.value));
+          hurdles.score = Math.max(0, Math.round(1000 + 7 * ((2 * 60 + 40) - hurdles.value)));
           hurdles.display = `${fa(minutes)}:${fa(seconds).padStart(2, "۰")}`;
           item.total = EVENTS.reduce((sum, event) => {
             const entry = event.id === "hurdles" ? hurdles : item.events?.[event.id];

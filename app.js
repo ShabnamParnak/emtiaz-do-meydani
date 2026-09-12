@@ -14,7 +14,7 @@ const EVENTS = [
     unit: "دقیقه و ثانیه",
     icon: "hurdles",
     referenceSeconds: 2 * 60 + 40,
-    pointsPerSecond: 14,
+    pointsPerSecond: 7,
     placeholderMinutes: "2",
     placeholderSeconds: "40"
   },
@@ -154,7 +154,7 @@ function loadHistory() {
         const seconds = raw % 100;
         if (raw >= 100 && seconds < 60) {
           hurdles.value = minutes * 60 + seconds;
-          hurdles.score = Math.max(0, Math.round(1000 + 14 * ((2 * 60 + 40) - hurdles.value)));
+          hurdles.score = Math.max(0, Math.round(1000 + 7 * ((2 * 60 + 40) - hurdles.value)));
           hurdles.display = `${fa(minutes)}:${fa(seconds).padStart(2, "۰")}`;
           item.total = EVENTS.reduce((sum, event) => {
             const entry = event.id === "hurdles" ? hurdles : item.events?.[event.id];

@@ -33,7 +33,7 @@ const EVENTS = [
     unit: "ثانیه",
     icon: "swim",
     reference: 31.5,
-    pointsPerUnit: 23,
+    pointsPerUnit: 24,
     step: "0.01"
   },
   {

@@ -191,6 +191,7 @@ function loadHistory() {
           }, 0);
         }
       }
+      item.total = recordTotal(item);
       return item;
     });
   } catch {
@@ -311,7 +312,7 @@ function renderSummaryTable(items) {
       <th>${escapeHtml(item.athlete)}</th>
       <td>${formatFaDate(item.date)}</td>
       ${cells}
-      <td><b>${fa(recordTotal(item))}</b></td>
+      <td class="total-cell"><b>${fa(item.total ?? recordTotal(item))}</b></td>
       <td><button type="button" class="ghost" data-delete="${item.id}">حذف</button></td>
     </tr>`;
   }).join("");
@@ -409,7 +410,7 @@ function saveRecord() {
     athlete: record.athlete,
     date: record.date,
     events: record.events,
-    total: record.total
+    total: recordTotal({ events: record.events })
   });
   saveHistory(items);
   updateAthleteList();

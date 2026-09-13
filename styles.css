@@ -431,6 +431,16 @@ input {
   min-width: 960px;
 }
 
+.summary-table .total-cell,
+.summary-table th:nth-last-child(2) {
+  background: #fff3d6;
+}
+
+.summary-table .total-cell b {
+  color: #7a4e00;
+  font-size: 20px;
+}
+
 .event-table h2 .icon {
   width: 36px;
   height: 36px;

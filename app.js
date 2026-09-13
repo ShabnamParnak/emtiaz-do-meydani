@@ -40,13 +40,13 @@ const EVENTS = [
     id: "swim",
     title: "شنا",
     kind: "time",
-    unit: "دقیقه و ثانیه",
+    unit: "ثانیه",
     icon: "swim",
     referenceSeconds: 31.5,
     pointsPerSecond: 24,
-    placeholderMinutes: "0",
-    placeholderSeconds: "31.50",
-    step: "0.01",
+    timeParts: "secondsHundredths",
+    placeholderSeconds: "31",
+    placeholderHundredths: "50",
     decimalSeconds: true
   },
   {
@@ -97,16 +97,27 @@ function render() {
   const root = document.getElementById("events");
   root.innerHTML = EVENTS.map((event) => {
     const input = event.kind === "time"
-      ? `<div class="time-fields">
-           <div class="field">
-             <label>دقیقه</label>
-             <input class="num" data-id="${event.id}" data-part="minutes" inputmode="numeric" placeholder="${event.placeholderMinutes || "0"}" />
-           </div>
-           <div class="field">
-             <label>ثانیه</label>
-             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.placeholderSeconds || "0"}" />
-           </div>
-         </div>`
+      ? event.timeParts === "secondsHundredths"
+        ? `<div class="time-fields">
+             <div class="field">
+               <label>ثانیه</label>
+               <input class="num" data-id="${event.id}" data-part="seconds" inputmode="numeric" placeholder="${event.placeholderSeconds || "31"}" />
+             </div>
+             <div class="field">
+               <label>صدم ثانیه</label>
+               <input class="num" data-id="${event.id}" data-part="hundredths" inputmode="numeric" placeholder="${event.placeholderHundredths || "50"}" />
+             </div>
+           </div>`
+        : `<div class="time-fields">
+             <div class="field">
+               <label>دقیقه</label>
+               <input class="num" data-id="${event.id}" data-part="minutes" inputmode="numeric" placeholder="${event.placeholderMinutes || "0"}" />
+             </div>
+             <div class="field">
+               <label>ثانیه</label>
+               <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.placeholderSeconds || "0"}" />
+             </div>
+           </div>`
       : `<div class="field">
            <label>${event.unit}</label>
            <input class="num" data-id="${event.id}" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.reference}" />
@@ -131,6 +142,16 @@ function render() {
 }
 
 function readValue(event) {
+  if (event.kind === "time" && event.timeParts === "secondsHundredths") {
+    const secondsRaw = document.querySelector(`[data-id="${event.id}"][data-part="seconds"]`).value;
+    const hundredthsRaw = document.querySelector(`[data-id="${event.id}"][data-part="hundredths"]`).value;
+    if (secondsRaw === "" && hundredthsRaw === "") return null;
+    const seconds = parseLocaleNumber(secondsRaw) || 0;
+    const hundredths = parseLocaleNumber(hundredthsRaw);
+    if (hundredths == null) return seconds;
+    return seconds + Math.min(99, Math.max(0, hundredths)) / 100;
+  }
+
   if (event.kind === "time") {
     const minutesRaw = document.querySelector(`[data-id="${event.id}"][data-part="minutes"]`).value;
     const secondsRaw = document.querySelector(`[data-id="${event.id}"][data-part="seconds"]`).value;
@@ -212,11 +233,10 @@ function formatEventValue(event, value) {
     const minutes = Math.floor(value / 60);
     const seconds = value % 60;
     if (event.decimalSeconds) {
-      const secondsText = Number(seconds).toLocaleString("fa-IR", {
+      return Number(value).toLocaleString("fa-IR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
-      return `${fa(minutes)}:${secondsText}`;
     }
     return `${fa(minutes)}:${fa(Math.round(seconds)).padStart(2, "۰")}`;
   }

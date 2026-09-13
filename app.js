@@ -294,6 +294,47 @@ function eventEntry(item, eventId) {
   return null;
 }
 
+function recordTotal(item) {
+  return EVENTS.reduce((sum, event) => sum + (eventEntry(item, event.id)?.score ?? 0), 0);
+}
+
+function renderSummaryTable(items) {
+  const head = EVENTS.map((event) => `<th>${event.title}</th>`).join("");
+  const rows = items.map((item) => {
+    const cells = EVENTS.map((event) => {
+      const entry = eventEntry(item, event.id);
+      if (!entry || entry.score == null) return `<td>—</td>`;
+      return `<td><b>${fa(entry.score)}</b><small>${entry.display}</small></td>`;
+    }).join("");
+
+    return `<tr>
+      <th>${escapeHtml(item.athlete)}</th>
+      <td>${formatFaDate(item.date)}</td>
+      ${cells}
+      <td><b>${fa(recordTotal(item))}</b></td>
+      <td><button type="button" class="ghost" data-delete="${item.id}">حذف</button></td>
+    </tr>`;
+  }).join("");
+
+  return `<section class="table-card summary-table">
+    <h2>جمع‌بندی</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ورزشکار</th>
+            <th>تاریخ</th>
+            ${head}
+            <th>جمع</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </section>`;
+}
+
 function renderTable() {
   const root = document.getElementById("historyTable");
   const items = loadHistory().sort((a, b) => b.date.localeCompare(a.date) || a.athlete.localeCompare(b.athlete, "fa"));
@@ -303,7 +344,7 @@ function renderTable() {
     return;
   }
 
-  root.innerHTML = EVENTS.map((event) => {
+  const eventTables = EVENTS.map((event) => {
     const rows = items.filter((item) => {
       const entry = eventEntry(item, event.id);
       return entry && entry.score != null;
@@ -340,6 +381,8 @@ function renderTable() {
       </div>
     </section>`;
   }).join("");
+
+  root.innerHTML = renderSummaryTable(items) + eventTables;
 }
 
 function setTab(tab) {

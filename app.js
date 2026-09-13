@@ -25,7 +25,7 @@ const EVENTS = [
     unit: "نمره",
     icon: "shooting",
     reference: 180,
-    pointsPerUnit: 14
+    pointsPerUnit: 7
   },
   {
     id: "grenade",
@@ -39,12 +39,15 @@ const EVENTS = [
   {
     id: "swim",
     title: "شنا",
-    kind: "lower",
-    unit: "ثانیه",
+    kind: "time",
+    unit: "دقیقه و ثانیه",
     icon: "swim",
-    reference: 31.5,
-    pointsPerUnit: 14,
-    step: "0.01"
+    referenceSeconds: 31.5,
+    pointsPerSecond: 24,
+    placeholderMinutes: "0",
+    placeholderSeconds: "31.50",
+    step: "0.01",
+    decimalSeconds: true
   },
   {
     id: "endurance",
@@ -53,7 +56,7 @@ const EVENTS = [
     unit: "دقیقه و ثانیه",
     icon: "endurance",
     referenceSeconds: 28 * 60,
-    pointsPerSecond: 14,
+    pointsPerSecond: 1,
     placeholderMinutes: "28",
     placeholderSeconds: "00"
   }
@@ -101,7 +104,7 @@ function render() {
            </div>
            <div class="field">
              <label>ثانیه</label>
-             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" placeholder="${event.placeholderSeconds || "0"}" />
+             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.placeholderSeconds || "0"}" />
            </div>
          </div>`
       : `<div class="field">
@@ -146,6 +149,11 @@ function loadHistory() {
     return items.map((item) => {
       if (item.events?.sprint && !item.events.swim) {
         item.events.swim = item.events.sprint;
+      }
+      const swim = item.events?.swim;
+      if (swim && swim.value != null && !String(swim.display || "").includes(":")) {
+        swim.score = Math.max(0, Math.round(1000 + 24 * (31.5 - Number(swim.value))));
+        swim.display = formatEventValue(EVENTS.find((event) => event.id === "swim"), Number(swim.value));
       }
       const hurdles = item.events?.hurdles;
       if (hurdles && hurdles.value != null && !String(hurdles.display || "").includes(":")) {
@@ -202,8 +210,15 @@ function formatEventValue(event, value) {
   if (value == null) return "—";
   if (event.kind === "time") {
     const minutes = Math.floor(value / 60);
-    const seconds = Math.round(value % 60);
-    return `${fa(minutes)}:${fa(seconds).padStart(2, "۰")}`;
+    const seconds = value % 60;
+    if (event.decimalSeconds) {
+      const secondsText = Number(seconds).toLocaleString("fa-IR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      return `${fa(minutes)}:${secondsText}`;
+    }
+    return `${fa(minutes)}:${fa(Math.round(seconds)).padStart(2, "۰")}`;
   }
   return fa(value);
 }

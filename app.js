@@ -100,16 +100,16 @@ function render() {
       ? `<div class="time-fields">
            <div class="field">
              <label>دقیقه</label>
-             <input class="num" data-id="${event.id}" data-part="minutes" inputmode="numeric" placeholder="${event.placeholderMinutes || "0"}" />
+             <input class="num" data-id="${event.id}" data-part="minutes" inputmode="numeric" value="${event.placeholderMinutes || "0"}" />
            </div>
            <div class="field">
              <label>ثانیه</label>
-             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.placeholderSeconds || "0"}" />
+             <input class="num" data-id="${event.id}" data-part="seconds" inputmode="decimal" step="${event.step || "1"}" value="${event.placeholderSeconds || "0"}" />
            </div>
          </div>`
       : `<div class="field">
            <label>${event.unit}</label>
-           <input class="num" data-id="${event.id}" inputmode="decimal" step="${event.step || "1"}" placeholder="${event.reference}" />
+           <input class="num" data-id="${event.id}" inputmode="decimal" step="${event.step || "1"}" value="${event.reference}" />
          </div>`;
 
     return `<article class="event-card tone-${event.icon}" id="card-${event.id}">
@@ -360,10 +360,21 @@ updateScores();
 
 document.getElementById("events").addEventListener("input", updateScores);
 document.getElementById("saveBtn").addEventListener("click", saveRecord);
+function fillDefaults() {
+  EVENTS.forEach((event) => {
+    if (event.kind === "time") {
+      document.querySelector(`[data-id="${event.id}"][data-part="minutes"]`).value = event.placeholderMinutes || "0";
+      document.querySelector(`[data-id="${event.id}"][data-part="seconds"]`).value = event.placeholderSeconds || "0";
+      return;
+    }
+    document.querySelector(`[data-id="${event.id}"]`).value = String(event.reference);
+  });
+}
+
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("athlete").value = "";
   document.getElementById("recordDate").value = todayInputValue();
-  document.querySelectorAll("#events input").forEach((input) => { input.value = ""; });
+  fillDefaults();
   updateScores();
 });
 document.getElementById("tabs").addEventListener("click", (e) => {
